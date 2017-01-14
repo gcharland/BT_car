@@ -1,5 +1,5 @@
 #include <SoftwareSerial.h>
-#include <Motor.h>
+#include "/libraries/Motor/Motor.h"
 
 #define leftFwd 5
 #define leftBwd 6
