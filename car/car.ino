@@ -4,6 +4,7 @@
 
 #include <SoftwareSerial.h>
 #include "libraries/Motor/Motor.h"
+#include "libraries/NewPing/NewPing.h"
 
 #define leftFwd 5
 #define leftBwd 6
@@ -13,10 +14,17 @@
 #define HC05_RXD 2
 #define HC05_TXD 3
 
+#define echo 7
+#define trig 8
+
+#define max_distance 30
+
+SoftwareSerial BTSerial(HC05_TXD, HC05_RXD);
+
 Motor leftWheel(leftFwd, leftBwd);
 Motor rightWheel(rightFwd, rightBwd);
 
-SoftwareSerial BTSerial(HC05_TXD, HC05_RXD);
+NewPing Sonar(trig, echo, max_distance);
 
 long distance;
 int serial_byte, last_motion_command; // int en lien avec la lectire des commandes par Serial
@@ -56,6 +64,9 @@ void loop() {
     } else if (serial_byte == 113 || serial_byte == 101) {
       readSpeed();
     }
+  }
+  if (Sonar.ping_cm < 5 && isForward) {
+	  stopMotion();
   }
 }
 
