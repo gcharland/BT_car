@@ -1,3 +1,7 @@
+/*
+	Main script for BT controled Car
+*/
+
 #include <SoftwareSerial.h>
 #include "libraries/Motor/Motor.h"
 
