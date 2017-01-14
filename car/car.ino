@@ -1,10 +1,6 @@
-/*
-	Main script for BT controled Car
-*/
-
 #include <SoftwareSerial.h>
 #include "libraries/Motor/Motor.h"
-#include "libraries/NewPing/NewPing.h"
+//#include "libraries/NewPing/NewPing.h"
 
 #define leftFwd 5
 #define leftBwd 6
@@ -17,19 +13,16 @@
 #define echo 7
 #define trig 8
 
-#define max_distance 30
+int serial_byte, last_motion_command; // int en lien avec la lecture des commandes par Serial
+int spd = 0;
+bool isForward = false;
 
 SoftwareSerial BTSerial(HC05_TXD, HC05_RXD);
 
 Motor leftWheel(leftFwd, leftBwd);
 Motor rightWheel(rightFwd, rightBwd);
 
-NewPing Sonar(trig, echo, max_distance);
-
-long distance;
-int serial_byte, last_motion_command; // int en lien avec la lectire des commandes par Serial
-int spd = 0;
-bool isForward = false;
+//NewPing Sonar(trig, echo);
 
 /*
  * *************
@@ -41,6 +34,8 @@ void setup() {
   pinMode(leftBwd, OUTPUT);
   pinMode(rightFwd, OUTPUT);
   pinMode(rightBwd, OUTPUT);
+  pinMode(trig, OUTPUT);
+  pinMode(echo, INPUT);
 
   //Serial.begin(9600);
   BTSerial.begin(9600);
@@ -64,9 +59,6 @@ void loop() {
     } else if (serial_byte == 113 || serial_byte == 101) {
       readSpeed();
     }
-  }
-  if (Sonar.ping_cm < 5 && isForward) {
-	  stopMotion();
   }
 }
 
